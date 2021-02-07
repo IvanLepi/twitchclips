@@ -1,0 +1,20 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Twitch Demo</title>
+	</head>
+	
+	<body>
+	
+		<h2>This Twitch feed shows most popular games right now</h2>
+
+		<th:block th:each="game : ${feed}">
+			<h4 th:text="${game.name}">TITLE</h4>
+			<p th:text="${game.id}">ID</p>
+			<p th:text="${game.box_art_url}">BOXART</p>
+			<hr/>
+		</th:block>
+	</body>
+</html>

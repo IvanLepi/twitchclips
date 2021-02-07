@@ -1,0 +1,23 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Clips Page</title>
+	</head>
+	
+	<body>
+	
+		<h1>This Twitch feed shows most popular CLIPS right now</h1>
+
+		<th:block th:each="clip : ${clipsfeed}">
+            <h2 th:text="${clip.title}">Title</h2>
+			<h4 th:text="${clip.broadcaster_name} + ' ' +  ${clip.game_id}">Channel</h4>
+			
+			<img th:src="${clip.thumbnail_url}">Thumbnail</img>
+			<iframe
+    			th:src="${clip.embed_url} + '&parent=' + 'localhost'" height="272" width="480" allowfullscreen="true" ></iframe>
+			<hr/>
+		</th:block>
+	</body>
+</html>
