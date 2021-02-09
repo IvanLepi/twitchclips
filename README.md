@@ -4,8 +4,8 @@ Simple application created with Spring Boot. The aplication consumes Twitch API 
 Front end of the application pulls the data from our local database and displays it for the end user. 
 
 ## Tech Stack
-    * Spring Boot
-    * Spring  OAuth2
-    * Spring Web
-    * DB 
-        *MongoDB
+* Spring Boot
+* Spring  OAuth2
+* Spring Web
+* DB 
+    * MongoDB

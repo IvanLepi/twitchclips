@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dev.ivanlepi.twitchclips.repository.GameRepository;
+import dev.ivanlepi.twitchclips.repository.ClipsRepository;
 import dev.ivanlepi.twitchclips.service.GamelistService;
 import dev.ivanlepi.twitchclips.service.Twitch;
 
@@ -29,21 +30,18 @@ public class SocialConfig {
 	Environment env;
 
 	private GameRepository gameRepo;
+	private ClipsRepository clipRepo;
 	
 	final Logger log = LoggerFactory.getLogger(SocialConfig.class);
 
     @Bean
     @RequestScope
-    public Twitch twitch(GameRepository repository) {
-		this.gameRepo = repository;
+    public Twitch twitch(GameRepository gameRepository, ClipsRepository clipRepository) {
+		this.gameRepo = gameRepository;
+		this.clipRepo = clipRepository;
         String accessToken = "";
         try {
 			log.info("Obtaining new access Token");
-
-			log.info("our client_id" + env.getProperty("client_id"));
-			log.info("our client_secret" + env.getProperty("client_secret"));
-
-
 
 			MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 			params.add("grant_type", "client_credentials");
@@ -66,13 +64,14 @@ public class SocialConfig {
 			log.info("Failed to obtain access Token");
             e.printStackTrace();
         }
-        return new Twitch(accessToken, gameRepo);
+        return new Twitch(accessToken, gameRepo, clipRepo);
     }
 
 	@Bean
-	public GamelistService gamelistService(GameRepository gameRepository) {
+	public GamelistService gamelistService(GameRepository gameRepository, ClipsRepository clipRepository) {
 		this.gameRepo = gameRepository;
-		return new GamelistService(gameRepo);
+		this.clipRepo = clipRepository;
+		return new GamelistService(gameRepo, clipRepo);
 	}
 }
 

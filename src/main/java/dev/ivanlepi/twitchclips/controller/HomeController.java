@@ -24,16 +24,23 @@ public class HomeController {
         this.gamelistService = gamelistService;
     }
 
-    @GetMapping("/")
-    public String home(Model model) {
-        model.addAttribute("feed", gamelistService.getGames());
-        return "home";
-    }
-
     // @GetMapping("/")
     // public String home(Model model) {
-    //     model.addAttribute("feed", twitch.updateGames());
+    //     model.addAttribute("feed", gamelistService.getGames());
     //     return "home";
     // }
+
+    // @GetMapping("/")
+    // public String clipshome(Model model) {
+    //     model.addAttribute("clipsfeed", twitch.updateClips("509658"));
+    //     return "home";
+    // }
+
+    @GetMapping("/")
+    public String clipshome(Model model) {
+        model.addAttribute("clipsfeed", gamelistService.getBroadcasterClips("71190292"));
+        return "clipshome";
+    }
+
 }
 
