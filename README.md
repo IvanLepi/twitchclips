@@ -9,3 +9,12 @@ Front end of the application pulls the data from our local database and displays
 * Spring Web
 * DB 
     * MongoDB
+    
+    
+##TODO
+* Finish the backend API
+* Implement Update Service
+* Decide on Front-End Client
+* Work on Client side
+* Use Docker?
+* Use CI/CD
