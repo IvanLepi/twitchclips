@@ -1,6 +1,9 @@
 package dev.ivanlepi.twitchclips.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -21,8 +24,8 @@ public class ClipsCustomRepositoryImpl implements ClipsCustomRepository {
       * @param broadcaster_id Optional parameter to find all documents with specified broadcaster_id
 	  * @return List<Clip> This returns list of Clips from our database with specified Criteria.
 	  */
-    public List<Clip> findBy(String game_id, String broadcaster_id){
-        final Query query = new Query();
+    public List<Clip> findBy(String game_id, String broadcaster_id, Pageable page){
+        final Query query = new Query().with(page);
 
         final List<Criteria> criteria = new ArrayList<Criteria>();
 
@@ -36,7 +39,6 @@ public class ClipsCustomRepositoryImpl implements ClipsCustomRepository {
         if(!criteria.isEmpty()){
             query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()])));
         }
-
         return mongoTemplate.find(query, Clip.class);
     }
     

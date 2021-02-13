@@ -42,16 +42,15 @@ public class Twitch extends ApiBinding {
         return listOfGames;
     }
 
-    // Update our database with clips for particular game_id
     /**
      * This method updates our database with clips for particular Game.
      * @param game_id Every Game has its own game_id field.
      */
     public List<Clip> updateClips(String game_id) {
         List<Clip> listOfClips = restTemplate.getForObject(TWITCH_API_BASE_URL +
-        "/clips/?game_id=" + game_id, ClipsFeed.class).getData();
+        "/clips/?game_id=" + game_id + "&first=100", ClipsFeed.class).getData();
 
-        clipRepository.deleteAll();
+        //clipRepository.deleteAll();
 
         // Iterate over list of clips and update the database
         for (Clip clip : listOfClips) {
