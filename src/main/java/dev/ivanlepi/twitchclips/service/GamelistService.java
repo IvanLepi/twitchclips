@@ -5,14 +5,16 @@ import dev.ivanlepi.twitchclips.models.Game;
 import dev.ivanlepi.twitchclips.repository.GameRepository;
 import dev.ivanlepi.twitchclips.repository.ClipsRepository;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public class GamelistService {
 
-    private final GameRepository gameRepository;
+	private final GameRepository gameRepository;
 	private final ClipsRepository clipRepository;
 
 	public GamelistService(GameRepository gameRepository, ClipsRepository clipRepository) {
@@ -23,18 +25,40 @@ public class GamelistService {
 	/**
 	 * This method returns the list of games from our database.
 	 */
-	public List<Game> getGames(){
+	public List<Game> getGames() {
 		return gameRepository.findAll();
 	}
 
 	/**
-	 * This method returns the list of Clips for selected game.
-	 * @param game_id Every Clip object has game_id parameter.
+	 * This method returns the list of Clips for selected game, selected broadcaster
+	 * or both.
+	 * 
+	 * @param game_id        Every Clip object has game_id parameter.
+	 * @param broadcaster_id Every Clip object has broadcaster_id parameter.
+	 * @param page           Pagination.
 	 * @return Page<Clip> This returns list of Clips.
 	 */
-	public Page<Clip> getClips(String game_id,Pageable page){
-		final Example<Clip> example = Example.of(new Clip(game_id));
-		return clipRepository.findAll(example, page);
+	public Page<Clip> getClips(String game_id, String broadcaster_id, Pageable page) {
+		return clipRepository.findBy(game_id, broadcaster_id, page);
 	}
-	
+
+	// Implementation of Pagination 2.0
+	public Map<String, Object> getResponse(String game_id, String broadcaster_id, Pageable page) {
+		List<Clip> clips = new ArrayList<>();
+
+		Page<Clip> pageClips = getClips(game_id, broadcaster_id, page);
+
+		clips = pageClips.getContent();
+
+		Map<String, Integer> pageData = new HashMap<String, Integer>();
+		pageData.put("currentPage", pageClips.getNumber());
+		pageData.put("totalItems", Math.toIntExact(pageClips.getTotalElements()));
+		pageData.put("totalPages", pageClips.getTotalPages());
+
+		Map<String, Object> response = new HashMap<>();
+		response.put("data", clips);
+		response.put("pagination", pageData);
+
+		return response;
+	}
 }

@@ -2,7 +2,6 @@ package dev.ivanlepi.twitchclips.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -11,6 +10,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.ArrayList;
 import dev.ivanlepi.twitchclips.models.Clip;
+import org.springframework.data.support.PageableExecutionUtils;
+
+
 
 @Repository
 public class ClipsCustomRepositoryImpl implements ClipsCustomRepository {
@@ -20,11 +22,11 @@ public class ClipsCustomRepositoryImpl implements ClipsCustomRepository {
 
     /**
 	  * This method returns the list of Clips for selected game and or broadcaster from our database.
-	  * @param game_id Optional parameter to find all documents withat specified game_id
+	  * @param game_id Optional parameter to find all documents with specified game_id
       * @param broadcaster_id Optional parameter to find all documents with specified broadcaster_id
-	  * @return List<Clip> This returns list of Clips from our database with specified Criteria.
+	  * @return Page<Clip> This returns list of Clips from our database with specified Criteria.
 	  */
-    public List<Clip> findBy(String game_id, String broadcaster_id, Pageable page){
+    public Page<Clip> findBy(String game_id, String broadcaster_id, Pageable page){
         final Query query = new Query().with(page);
 
         final List<Criteria> criteria = new ArrayList<Criteria>();
@@ -39,7 +41,13 @@ public class ClipsCustomRepositoryImpl implements ClipsCustomRepository {
         if(!criteria.isEmpty()){
             query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()])));
         }
-        return mongoTemplate.find(query, Clip.class);
+        List<Clip> listOfClips = mongoTemplate.find(query, Clip.class);
+        
+        // Using PageableExecutionUtils to convert from List<Clip> to Page<Clip>.
+        Page<Clip> myClips = PageableExecutionUtils.getPage(listOfClips, page, 
+            () -> mongoTemplate.count(Query.of(query).limit(-1).skip(-1),Clip.class));
+        
+        return myClips;
     }
     
 }

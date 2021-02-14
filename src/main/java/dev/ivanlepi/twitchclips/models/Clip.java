@@ -3,7 +3,6 @@ package dev.ivanlepi.twitchclips.models;
 import lombok.Data;
 
 @Data
-
 public class Clip {
     private String id;
     private String url;
@@ -19,8 +18,4 @@ public class Clip {
     private String view_count;
     private String created_at;
     private String thumbnail_url;
-
-    public Clip(String game_id){
-        this.game_id = game_id;
-    }
 }
