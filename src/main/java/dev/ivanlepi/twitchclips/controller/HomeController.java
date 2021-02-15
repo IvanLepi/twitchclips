@@ -1,5 +1,6 @@
 package dev.ivanlepi.twitchclips.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Controller
+@CrossOrigin(origins = "http://localhost:8080") // TODO change to different port once we have a client
 public class HomeController {
 
     public static final Logger LOG = LoggerFactory.getLogger(HomeController.class);
