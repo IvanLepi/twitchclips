@@ -34,8 +34,7 @@ public class SocialConfig {
 	
 	final Logger log = LoggerFactory.getLogger(SocialConfig.class);
 
-    @Bean
-    @RequestScope
+	@Bean
     public Twitch twitch(GameRepository gameRepository, ClipsRepository clipRepository) {
 		this.gameRepo = gameRepository;
 		this.clipRepo = clipRepository;

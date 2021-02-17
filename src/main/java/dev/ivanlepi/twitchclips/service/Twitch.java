@@ -1,6 +1,11 @@
 package dev.ivanlepi.twitchclips.service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
 import dev.ivanlepi.twitchclips.models.Game;
 import dev.ivanlepi.twitchclips.models.Feed;
 import dev.ivanlepi.twitchclips.models.ClipsFeed;
@@ -9,6 +14,7 @@ import dev.ivanlepi.twitchclips.models.Clip;
 import dev.ivanlepi.twitchclips.repository.GameRepository;
 import dev.ivanlepi.twitchclips.repository.ClipsRepository;
 
+@Service
 public class Twitch extends ApiBinding {
 
     private static final String TWITCH_API_BASE_URL = "https://api.twitch.tv/helix";
@@ -58,5 +64,20 @@ public class Twitch extends ApiBinding {
         }
 
         return listOfClips;
+    }
+
+    @Async
+    public CompletableFuture<List<Clip>> getAsyncClips(String game_id) throws InterruptedException{
+        LOG.info("Looking up clips {}", game_id);
+        List<Clip> listOfClips = restTemplate.getForObject(TWITCH_API_BASE_URL +
+        "/clips/?game_id=" + game_id, ClipsFeed.class).getData(); 
+        
+        // Iterate over list of clips and update the database
+        for (Clip clip : listOfClips) {
+            clipRepository.save(clip);
+        }
+
+        Thread.sleep(5000L);
+        return CompletableFuture.completedFuture(listOfClips);
     }
 }
