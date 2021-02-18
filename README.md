@@ -11,7 +11,7 @@ Front end of the application pulls the data from our local database and displays
     * MongoDB
     
     
-##TODO
+## TODO
 * Finish the backend API
 * Implement Update Service
 * Decide on Front-End Client
