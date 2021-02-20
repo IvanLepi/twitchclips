@@ -1,7 +1,6 @@
 package dev.ivanlepi.twitchclips.service;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -35,7 +34,7 @@ public class Twitch extends ApiBinding {
      */
     public List<Game> updateGames() {
         List<Game> listOfGames = restTemplate.getForObject(TWITCH_API_BASE_URL +
-        "/games/top", Feed.class).getData();
+        "/games/top?first=100", Feed.class).getData();
                 
         // Empty the database to see if its updating properly
         gameRepository.deleteAll();
@@ -44,7 +43,6 @@ public class Twitch extends ApiBinding {
 		for (Game game : listOfGames){
 			gameRepository.save(game);
 		}
-        // TODO Return status code and not list of games.
         return listOfGames;
     }
 
@@ -52,32 +50,16 @@ public class Twitch extends ApiBinding {
      * This method updates our database with clips for particular Game.
      * @param game_id Every Game has its own game_id field.
      */
-    public List<Clip> updateClips(String game_id) {
-        List<Clip> listOfClips = restTemplate.getForObject(TWITCH_API_BASE_URL +
-        "/clips/?game_id=" + game_id + "&first=100", ClipsFeed.class).getData();
-
-        //clipRepository.deleteAll();
-
-        // Iterate over list of clips and update the database
-        for (Clip clip : listOfClips) {
-            clipRepository.save(clip);
-        }
-
-        return listOfClips;
-    }
-
     @Async
-    public CompletableFuture<List<Clip>> getAsyncClips(String game_id) throws InterruptedException{
+    public void getAsyncClips(String game_id) throws InterruptedException{
         LOG.info("Looking up clips {}", game_id);
         List<Clip> listOfClips = restTemplate.getForObject(TWITCH_API_BASE_URL +
-        "/clips/?game_id=" + game_id, ClipsFeed.class).getData(); 
+        "/clips/?game_id=" + game_id + "&first=100", ClipsFeed.class).getData(); 
         
         // Iterate over list of clips and update the database
         for (Clip clip : listOfClips) {
             clipRepository.save(clip);
         }
-
         Thread.sleep(5000L);
-        return CompletableFuture.completedFuture(listOfClips);
     }
 }

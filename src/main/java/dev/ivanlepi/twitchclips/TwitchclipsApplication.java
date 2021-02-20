@@ -1,7 +1,6 @@
 package dev.ivanlepi.twitchclips;
 
 import java.util.concurrent.Executor;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,8 +23,8 @@ public class TwitchclipsApplication {
 	@Bean
 	public Executor taskExecutor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(4);
-		executor.setMaxPoolSize(4);
+		executor.setCorePoolSize(5);
+		executor.setMaxPoolSize(5);
 		executor.setQueueCapacity(500);
 		executor.setThreadNamePrefix("TwitchLookup-");
 		executor.initialize();
