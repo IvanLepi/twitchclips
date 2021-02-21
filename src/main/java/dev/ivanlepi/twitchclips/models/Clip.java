@@ -15,7 +15,7 @@ public class Clip {
     private String game_id;
     private String language;
     private String title;
-    private String view_count;
+    private Integer view_count;
     private String created_at;
     private String thumbnail_url;
 }

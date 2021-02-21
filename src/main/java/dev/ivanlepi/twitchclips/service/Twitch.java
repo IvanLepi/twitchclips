@@ -1,6 +1,7 @@
 package dev.ivanlepi.twitchclips.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -51,8 +52,12 @@ public class Twitch extends ApiBinding {
      * @param game_id Every Game has its own game_id field.
      */
     @Async
-    public void getAsyncClips(String game_id) throws InterruptedException{
+    public void getAsyncClips(String game_id, Optional<String> fromDate) throws InterruptedException{
+        
+        clipRepository.deleteAll();
+        
         LOG.info("Looking up clips {}", game_id);
+
         List<Clip> listOfClips = restTemplate.getForObject(TWITCH_API_BASE_URL +
         "/clips/?game_id=" + game_id + "&first=100", ClipsFeed.class).getData(); 
         

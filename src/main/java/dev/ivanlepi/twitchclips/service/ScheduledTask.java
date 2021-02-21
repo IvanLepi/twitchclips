@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import java.util.List;
+import java.util.Optional;
+
 import dev.ivanlepi.twitchclips.models.Game;
 
 
@@ -26,7 +28,7 @@ public class ScheduledTask {
     }
 
     // Update our database every 6 hours
-    @Scheduled(cron = "0 0 */6 ? * *")
+    @Scheduled(cron = "0 */5 * ? * *")
     public void reportCurrentTime() {
         LOG.info("The time is now {}", dateFormat.format(new Date()));
         LOG.info("Running the update TASK");
@@ -40,8 +42,10 @@ public class ScheduledTask {
 
             // Kick of multiple, asynchronous lookups
             for (Game game : listOfGames) {
-                twitchService.getAsyncClips(game.getId());
+                twitchService.getAsyncClips(game.getId(), Optional.empty());
             }
+
+
 
         } catch (Exception e) {
             LOG.info("ERROR BRO", e.getMessage());
