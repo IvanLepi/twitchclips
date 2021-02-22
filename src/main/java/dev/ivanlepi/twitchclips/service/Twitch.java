@@ -53,9 +53,7 @@ public class Twitch extends ApiBinding {
      */
     @Async
     public void getAsyncClips(String game_id, Optional<String> fromDate) throws InterruptedException{
-        
-        clipRepository.deleteAll();
-        
+                
         LOG.info("Looking up clips {}", game_id);
 
         List<Clip> listOfClips = restTemplate.getForObject(TWITCH_API_BASE_URL +
