@@ -2,6 +2,7 @@ package dev.ivanlepi.twitchclips.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
 
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -28,41 +29,50 @@ public class Twitch extends ApiBinding {
         this.gameRepository = gameRepository;
         this.clipRepository = clipRepository;
     }
- 
+
     /**
      * This method updates our database with top 20 games from Twitch API.
+     * 
      * @return Nothing.
      */
     public List<Game> updateGames() {
-        List<Game> listOfGames = restTemplate.getForObject(TWITCH_API_BASE_URL +
-        "/games/top?first=100", Feed.class).getData();
-                
+        List<Game> listOfGames = restTemplate.getForObject(TWITCH_API_BASE_URL + "/games/top?first=100", Feed.class)
+                .getData();
+
         // Empty the database to see if its updating properly
         gameRepository.deleteAll();
 
         // Iterate over List of games and update the database
-		for (Game game : listOfGames){
-			gameRepository.save(game);
-		}
+        for (Game game : listOfGames) {
+            gameRepository.save(game);
+        }
         return listOfGames;
     }
 
     /**
      * This method updates our database with clips for particular Game.
+     * 
      * @param game_id Every Game has its own game_id field.
      */
     @Async
-    public void getAsyncClips(String game_id, Optional<String> fromDate) throws InterruptedException{
-                
+    public void getAsyncClips(String game_id, Optional<String> trending) throws InterruptedException {
+
+        List<Clip> listOfClips = new ArrayList<>();
+
         LOG.info("Looking up clips {}", game_id);
 
-        List<Clip> listOfClips = restTemplate.getForObject(TWITCH_API_BASE_URL +
-        "/clips/?game_id=" + game_id + "&first=100", ClipsFeed.class).getData(); 
-        
+        if (!trending.isPresent()) {
+            listOfClips = restTemplate
+                    .getForObject(TWITCH_API_BASE_URL + "/clips/?game_id=" + game_id + "&first=100", ClipsFeed.class)
+                    .getData();
+        } else {
+            listOfClips = restTemplate.getForObject(TWITCH_API_BASE_URL + "/clips/?game_id=" + game_id + "&first=60"
+                    + "&started_at=" + trending, ClipsFeed.class).getData();
+        }
+
         // Iterate over list of clips and update the database
         for (Clip clip : listOfClips) {
             clipRepository.save(clip);
         }
-        Thread.sleep(5000L);
     }
 }

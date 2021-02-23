@@ -16,7 +16,7 @@ Front end of the application pulls the data from our local database and displays
 * Implement Update Service
     * :heavy_check_mark: Get Top 100 Games 
     * :heavy_check_mark: Get Top 100 Clips for each Game
-    * Get Top 100 Clips for each Game for the last 24 hours
+    * Get Top 60 Clips for each Game for the last 24 hours
 * Decide on Front-End Client
 * Work on Client side
 * Use Docker?

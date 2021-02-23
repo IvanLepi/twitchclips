@@ -27,25 +27,37 @@ public class ScheduledTask {
         this.twitchService = twitchService;
     }
 
-    // Update our database every 6 hours
-    @Scheduled(cron = "0 */5 * ? * *")
-    public void reportCurrentTime() {
+    // Update our database with Top Clips every day at 1 AM.
+    @Scheduled(cron = "0 0 1 * * ?")
+    public void updateTopClips() {
         LOG.info("The time is now {}", dateFormat.format(new Date()));
-        LOG.info("Running the update TASK");
-        updateDb();
+        LOG.info("Updating Top Clips");
+        updateDb(false);
     }
 
-    private void updateDb() {
+    // Update our database with Trending CLips every 3 hours.
+    @Scheduled(cron = "0 0 */3 ? * *") // 0 */5 * ? * *
+    public void updateTrendingClips() {
+        LOG.info("The time is now {}", dateFormat.format(new Date()));
+        LOG.info("Updating Trending Clips");
+        updateDb(true);
+    }
+
+
+    private void updateDb(Boolean trending) {
 
         try {
             List<Game> listOfGames = twitchService.updateGames();
 
             // Kick of multiple, asynchronous lookups
             for (Game game : listOfGames) {
-                twitchService.getAsyncClips(game.getId(), Optional.empty());
+                if(!trending){
+                    twitchService.getAsyncClips(game.getId(), Optional.empty());
+                }else{
+                    twitchService.getAsyncClips(game.getId(), Optional.of("trending"));
+                }
+                
             }
-
-
 
         } catch (Exception e) {
             LOG.info("ERROR BRO", e.getMessage());
