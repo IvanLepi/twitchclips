@@ -1,10 +1,12 @@
 package dev.ivanlepi.twitchclips.service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+    import java.util.Date;
 
 import java.util.List;
 import java.util.Optional;
+
+import com.mongodb.internal.thread.DaemonThreadFactory;
 
 import dev.ivanlepi.twitchclips.models.Game;
 
@@ -19,7 +21,7 @@ public class ScheduledTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(ScheduledTask.class);
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
 
     private final Twitch twitchService;
 
@@ -40,6 +42,7 @@ public class ScheduledTask {
     public void updateTrendingClips() {
         LOG.info("The time is now {}", dateFormat.format(new Date()));
         LOG.info("Updating Trending Clips");
+
         updateDb(true);
     }
 
@@ -54,7 +57,7 @@ public class ScheduledTask {
                 if(!trending){
                     twitchService.getAsyncClips(game.getId(), Optional.empty());
                 }else{
-                    twitchService.getAsyncClips(game.getId(), Optional.of("trending"));
+                    twitchService.getAsyncClips(game.getId(), Optional.of(startDate()));
                 }
                 
             }
@@ -63,5 +66,13 @@ public class ScheduledTask {
             LOG.info("ERROR BRO", e.getMessage());
         }
 
+    }
+
+    //Calculate 24 hours earlier date.
+    private String startDate() {
+        long currentDate = new Date().getTime();
+        long newDate = currentDate - 86400000;
+        String startDate = dateFormat.format(new Date(newDate));
+        return startDate.substring(0, (startDate.length() - 6)).concat("Z"); // change once we have different timezone
     }
 }

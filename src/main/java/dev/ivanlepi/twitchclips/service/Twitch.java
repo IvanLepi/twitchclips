@@ -55,19 +55,19 @@ public class Twitch extends ApiBinding {
      * @param game_id Every Game has its own game_id field.
      */
     @Async
-    public void getAsyncClips(String game_id, Optional<String> trending) throws InterruptedException {
+    public void getAsyncClips(String game_id, Optional<String> startDate) throws InterruptedException {
 
         List<Clip> listOfClips = new ArrayList<>();
 
         LOG.info("Looking up clips {}", game_id);
 
-        if (!trending.isPresent()) {
+        if (!startDate.isPresent()) {
             listOfClips = restTemplate
                     .getForObject(TWITCH_API_BASE_URL + "/clips/?game_id=" + game_id + "&first=100", ClipsFeed.class)
                     .getData();
         } else {
             listOfClips = restTemplate.getForObject(TWITCH_API_BASE_URL + "/clips/?game_id=" + game_id + "&first=60"
-                    + "&started_at=" + trending, ClipsFeed.class).getData();
+                    + "&started_at=" + startDate.get(), ClipsFeed.class).getData();
         }
 
         // Iterate over list of clips and update the database
