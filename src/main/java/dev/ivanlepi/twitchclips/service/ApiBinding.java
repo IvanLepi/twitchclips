@@ -1,4 +1,5 @@
 package dev.ivanlepi.twitchclips.service;
+
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -14,30 +15,27 @@ import org.slf4j.LoggerFactory;
 public abstract class ApiBinding {
 
     public static final Logger LOG = LoggerFactory.getLogger(ApiBinding.class);
-    
+
     protected RestTemplate restTemplate;
 
     @Value("${client_id}")
-	private String client_id;
-
-
+    private String client_id;
 
     public ApiBinding(String accessToken) {
         this.restTemplate = new RestTemplate();
-        if(accessToken != null){
+        if (accessToken != null) {
             this.restTemplate.getInterceptors().add(getBearerTokenInterceptor(accessToken));
         } else {
             this.restTemplate.getInterceptors().add(getNoBearerTokenInterceptor());
         }
-        
-    }
 
-    
+    }
 
     private ClientHttpRequestInterceptor getBearerTokenInterceptor(String accessToken) {
         return new ClientHttpRequestInterceptor() {
             @Override
-            public ClientHttpResponse intercept(HttpRequest request, byte[] bytes, ClientHttpRequestExecution execution) throws IOException{
+            public ClientHttpResponse intercept(HttpRequest request, byte[] bytes, ClientHttpRequestExecution execution)
+                    throws IOException {
                 request.getHeaders().add("Authorization", "Bearer " + accessToken);
                 request.getHeaders().add("client-id", client_id);
                 return execution.execute(request, bytes);
@@ -46,10 +44,10 @@ public abstract class ApiBinding {
     }
 
     private ClientHttpRequestInterceptor getNoBearerTokenInterceptor() {
-        return new ClientHttpRequestInterceptor(){
+        return new ClientHttpRequestInterceptor() {
             @Override
-            public ClientHttpResponse intercept(HttpRequest request, byte[] bytes,
-                        ClientHttpRequestExecution execution) throws IOException{
+            public ClientHttpResponse intercept(HttpRequest request, byte[] bytes, ClientHttpRequestExecution execution)
+                    throws IOException {
                 throw new IllegalStateException("Cant access the API without an access token");
             }
         };

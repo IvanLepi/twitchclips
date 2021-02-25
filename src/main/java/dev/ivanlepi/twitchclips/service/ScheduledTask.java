@@ -1,15 +1,12 @@
 package dev.ivanlepi.twitchclips.service;
 
 import java.text.SimpleDateFormat;
-    import java.util.Date;
+import java.util.Date;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.mongodb.internal.thread.DaemonThreadFactory;
-
 import dev.ivanlepi.twitchclips.models.Game;
-
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,14 +35,13 @@ public class ScheduledTask {
     }
 
     // Update our database with Trending CLips every 3 hours.
-    @Scheduled(cron = "0 0 */3 ? * *") // 0 */5 * ? * *
+    @Scheduled(cron = "0 0 */3 ? * *")
     public void updateTrendingClips() {
         LOG.info("The time is now {}", dateFormat.format(new Date()));
         LOG.info("Updating Trending Clips");
 
         updateDb(true);
     }
-
 
     private void updateDb(Boolean trending) {
 
@@ -54,12 +50,12 @@ public class ScheduledTask {
 
             // Kick of multiple, asynchronous lookups
             for (Game game : listOfGames) {
-                if(!trending){
+                if (!trending) {
                     twitchService.getAsyncClips(game.getId(), Optional.empty());
-                }else{
+                } else {
                     twitchService.getAsyncClips(game.getId(), Optional.of(startDate()));
                 }
-                
+
             }
 
         } catch (Exception e) {
@@ -68,7 +64,7 @@ public class ScheduledTask {
 
     }
 
-    //Calculate 24 hours earlier date.
+    // Calculate 24 hours earlier date.
     private String startDate() {
         long currentDate = new Date().getTime();
         long newDate = currentDate - 86400000;

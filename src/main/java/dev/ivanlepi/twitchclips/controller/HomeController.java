@@ -34,12 +34,14 @@ public class HomeController {
     @GetMapping("/clips")
     public ResponseEntity<Map<String, Object>> findByGameId(@RequestParam(required = false) String game_id,
             @RequestParam(required = false) String broadcaster_id, @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
+            @RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "default") String sort){
 
         try {
             Pageable paging = PageRequest.of(page, size);
 
-            return new ResponseEntity<>(gamelistService.getResponse(game_id, broadcaster_id, paging), HttpStatus.OK);
+            
+
+            return new ResponseEntity<>(gamelistService.getResponse(game_id, broadcaster_id, paging, sort), HttpStatus.OK);
 
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

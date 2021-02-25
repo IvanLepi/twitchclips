@@ -9,10 +9,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
-
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,15 +28,15 @@ public class SocialConfig {
 
 	private GameRepository gameRepo;
 	private ClipsRepository clipRepo;
-	
+
 	final Logger log = LoggerFactory.getLogger(SocialConfig.class);
 
 	@Bean
-    public Twitch twitch(GameRepository gameRepository, ClipsRepository clipRepository) {
+	public Twitch twitch(GameRepository gameRepository, ClipsRepository clipRepository) {
 		this.gameRepo = gameRepository;
 		this.clipRepo = clipRepository;
-        String accessToken = "";
-        try {
+		String accessToken = "";
+		try {
 			log.info("Obtaining new access Token");
 
 			MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -46,24 +44,24 @@ public class SocialConfig {
 			params.add("client_id", env.getProperty("client_id"));
 			params.add("client_secret", env.getProperty("client_secret"));
 
-			WebClient.RequestHeadersSpec<?> requestSpec1 = WebClient.create().post().uri("https://id.twitch.tv/oauth2/token").body(BodyInserters.fromValue(params));
+			WebClient.RequestHeadersSpec<?> requestSpec1 = WebClient.create().post()
+					.uri("https://id.twitch.tv/oauth2/token").body(BodyInserters.fromValue(params));
 
-			
 			String response3 = requestSpec1.retrieve().bodyToMono(String.class).block();
-		
+
 			// Get the Access Token From the recieved JSON response
 			ObjectMapper mapper = new ObjectMapper();
 			JsonNode node = mapper.readTree(response3);
 			String token = node.path("access_token").asText();
 
 			accessToken = token;
-           
-        } catch (Exception e) {
+
+		} catch (Exception e) {
 			log.info("Failed to obtain access Token");
-            e.printStackTrace();
-        }
-        return new Twitch(accessToken, gameRepo, clipRepo);
-    }
+			e.printStackTrace();
+		}
+		return new Twitch(accessToken, gameRepo, clipRepo);
+	}
 
 	@Bean
 	public GamelistService gamelistService(GameRepository gameRepository, ClipsRepository clipRepository) {
@@ -72,6 +70,3 @@ public class SocialConfig {
 		return new GamelistService(gameRepo, clipRepo);
 	}
 }
-
-
-	

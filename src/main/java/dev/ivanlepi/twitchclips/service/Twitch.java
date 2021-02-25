@@ -66,8 +66,9 @@ public class Twitch extends ApiBinding {
                     .getForObject(TWITCH_API_BASE_URL + "/clips/?game_id=" + game_id + "&first=100", ClipsFeed.class)
                     .getData();
         } else {
-            listOfClips = restTemplate.getForObject(TWITCH_API_BASE_URL + "/clips/?game_id=" + game_id + "&first=60"
-                    + "&started_at=" + startDate.get(), ClipsFeed.class).getData();
+            listOfClips = restTemplate.getForObject(
+                    TWITCH_API_BASE_URL + "/clips/?game_id=" + game_id + "&first=60" + "&started_at=" + startDate.get(),
+                    ClipsFeed.class).getData();
         }
 
         // Iterate over list of clips and update the database

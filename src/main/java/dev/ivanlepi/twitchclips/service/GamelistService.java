@@ -11,6 +11,7 @@ import java.util.HashMap;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 public class GamelistService {
 
@@ -38,15 +39,23 @@ public class GamelistService {
 	 * @param page           Pagination.
 	 * @return Page<Clip> This returns list of Clips.
 	 */
-	public Page<Clip> getClips(String game_id, String broadcaster_id, Pageable page) {
-		return clipRepository.findBy(game_id, broadcaster_id, page);
+	public Page<Clip> getClips(String game_id, String broadcaster_id, Pageable page, Sort sortBy) {
+		return clipRepository.findBy(game_id, broadcaster_id, page, sortBy);
 	}
 
 	// Implementation of Pagination 2.0
-	public Map<String, Object> getResponse(String game_id, String broadcaster_id, Pageable page) {
+	public Map<String, Object> getResponse(String game_id, String broadcaster_id, Pageable page, String sortBy) {
 		List<Clip> clips = new ArrayList<>();
 
-		Page<Clip> pageClips = getClips(game_id, broadcaster_id, page);
+		Page<Clip> pageClips;
+
+		if(sortBy.equalsIgnoreCase("new")){
+			pageClips = getClips(game_id, broadcaster_id, page, Sort.by(Sort.Direction.DESC, "created_at"));
+		} else {
+			pageClips = getClips(game_id, broadcaster_id, page, null);
+		}
+
+		
 
 		clips = pageClips.getContent();
 
