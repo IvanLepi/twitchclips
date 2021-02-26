@@ -44,30 +44,32 @@ public class GamelistService {
 	}
 
 	// Implementation of Pagination 2.0
-	public Map<String, Object> getResponse(String game_id, String broadcaster_id, Pageable page, String sortBy) {
+	public Map<String, Object> getResponse(String game_id, String broadcaster_id, Pageable page, String sortBy)
+			throws Exception {
 		List<Clip> clips = new ArrayList<>();
 
 		Page<Clip> pageClips;
+		Map<String, Object> response = new HashMap<>();
 
-		if(sortBy.equalsIgnoreCase("new")){
+		if (sortBy.equalsIgnoreCase("new")) {
 			pageClips = getClips(game_id, broadcaster_id, page, Sort.by(Sort.Direction.DESC, "created_at"));
 		} else {
-			pageClips = getClips(game_id, broadcaster_id, page, null);
+			pageClips = getClips(game_id, broadcaster_id, page, Sort.by(Sort.Direction.DESC, "view_count"));
 		}
 
-		
+		if (pageClips.getTotalElements() > 0) {
+			clips = pageClips.getContent();
 
-		clips = pageClips.getContent();
+			Map<String, Integer> pageData = new HashMap<String, Integer>();
+			pageData.put("currentPage", pageClips.getNumber());
+			pageData.put("totalItems", Math.toIntExact(pageClips.getTotalElements()));
+			pageData.put("totalPages", pageClips.getTotalPages());
 
-		Map<String, Integer> pageData = new HashMap<String, Integer>();
-		pageData.put("currentPage", pageClips.getNumber());
-		pageData.put("totalItems", Math.toIntExact(pageClips.getTotalElements()));
-		pageData.put("totalPages", pageClips.getTotalPages());
-
-		Map<String, Object> response = new HashMap<>();
-		response.put("data", clips);
-		response.put("pagination", pageData);
-
+			response.put("data", clips);
+			response.put("pagination", pageData);
+		} else {
+			throw new Exception("NO_CONTENT");
+		}
 		return response;
 	}
 }

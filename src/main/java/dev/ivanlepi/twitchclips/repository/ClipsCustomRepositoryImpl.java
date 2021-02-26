@@ -32,15 +32,8 @@ public class ClipsCustomRepositoryImpl implements ClipsCustomRepository {
      */
     public Page<Clip> findBy(String game_id, String broadcaster_id, Pageable page, Sort sortBy) {
 
-        final Query query;
-
-        if(sortBy == null){
-            query= new Query().with(page);
-
-        }else {
-            query= new Query().with(page).with(sortBy);
-        }
-
+        final Query query= new Query().with(page).with(sortBy);
+        
         final List<Criteria> criteria = new ArrayList<Criteria>();
 
         if (broadcaster_id != null && !broadcaster_id.isEmpty()) {

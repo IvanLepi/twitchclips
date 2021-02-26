@@ -39,12 +39,15 @@ public class HomeController {
         try {
             Pageable paging = PageRequest.of(page, size);
 
-            
-
             return new ResponseEntity<>(gamelistService.getResponse(game_id, broadcaster_id, paging, sort), HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            if(e.getMessage().matches("NO_CONTENT")){
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }else {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            
         }
     }
 

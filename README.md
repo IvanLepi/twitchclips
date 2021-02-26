@@ -14,7 +14,7 @@ Front end of the application pulls the data from our local database and displays
 ## TODO
 * Finish the backend API
     * :heavy_check_mark: Implement Sorting by new or by views
-    * Request validation and Return Codes 
+    * :heavy_check_mark: Request validation and Return Codes 
 * Implement Update Service
     * :heavy_check_mark: Get Top 100 Games 
     * :heavy_check_mark: Get Top 100 Clips for each Game
