@@ -22,7 +22,9 @@ Front end of the application pulls the data from our server and displays it for 
 * Decide on Front-End Client
     * React
 * Work on Client side
-* Use Docker?
+* Use Docker
+    * `spring-boot:build-image` for Spring Boot
+    * [Mongo Docker Image](https://hub.docker.com/_/mongo) for DB
 * Use CI/CD
 
 
