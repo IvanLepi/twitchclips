@@ -20,11 +20,12 @@ Front end of the application pulls the data from our server and displays it for 
     * :heavy_check_mark: Get Top 100 Clips for each Game
     * :heavy_check_mark: Get Top 60 Clips for each Game for the last 24 hours
 * Decide on Front-End Client
-    * React
+    * :heavy_check_mark: React
 * Work on Client side
-* Use Docker
-    * `spring-boot:build-image` for Spring Boot
-    * [Mongo Docker Image](https://hub.docker.com/_/mongo) for DB
+* Use Docker Compose
+    * :heavy_check_mark: `spring-boot:build-image` for Spring Boot
+    * :heavy_check_mark: [Mongo Docker Image](https://hub.docker.com/_/mongo) for DB
+    * Seperate Update Service into a seperate container
 * Use CI/CD
 
 
