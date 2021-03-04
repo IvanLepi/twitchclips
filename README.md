@@ -34,7 +34,8 @@ You can build them yourself from the sourcecode or just use ones I have created.
 * What you will need is:
     * Your own Twitch CLIENT_ID
     * Your own Twitch CLIENT_SECRET
-Sample docker-compose.yml can look like this if using my published Docker images:
+
+Example of docker-compose.yml if using my published Docker images:
 
 ```yml
 version: "3.7"
