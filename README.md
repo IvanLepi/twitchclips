@@ -29,13 +29,15 @@ Front end of the application pulls the data from our server and displays it for 
 * Use CI/CD
 
 ## Running the application
-Both API and Scheduler are available as public Docker images.
+Both API and Scheduler are available as public Docker images. Also Mongo Docker image is used.
 You can build them yourself from the sourcecode or just use ones I have created.
 * What you will need is:
     * Your own Twitch CLIENT_ID
     * Your own Twitch CLIENT_SECRET
 Sample docker-compose.yml can look like this if using my published Docker images:
-`version: "3.7"
+
+```yml
+version: "3.7"
 
 services:
   api: 
@@ -82,8 +84,7 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
 
 volumes:
-  twitchclips-db:`
-
-
+  twitchclips-db:
+```
 
 
