@@ -25,8 +25,65 @@ Front end of the application pulls the data from our server and displays it for 
 * Use Docker Compose
     * :heavy_check_mark: `spring-boot:build-image` for Spring Boot
     * :heavy_check_mark: [Mongo Docker Image](https://hub.docker.com/_/mongo) for DB
-    * Seperate Update Service into a seperate container
+    * :heavy_check_mark: Seperate Update Service into a seperate container
 * Use CI/CD
+
+## Running the application
+Both API and Scheduler are available as public Docker images.
+You can build them yourself from the sourcecode or just use ones I have created.
+* What you will need is:
+    * Your own Twitch CLIENT_ID
+    * Your own Twitch CLIENT_SECRET
+Sample docker-compose.yml can look like this if using my published Docker images:
+`version: "3.7"
+
+services:
+  api: 
+    depends_on: 
+      - mongo
+    image: devosdev/twitchclips:0.0.2-SNAPSHOT
+    ports: 
+      - 8080:8080
+    environment:
+      CLIENT_ID: ${CLIENT_ID}
+      CLIENT_SECRET: ${CLIENT_SECRET}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+
+  scheduler:
+    depends_on: 
+      - mongo
+    image: devosdev/twitchscheduler
+    ports: 
+      - 8082:8082
+    environment:
+      CLIENT_ID: ${CLIENT_ID}
+      CLIENT_SECRET: ${CLIENT_SECRET}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    
+
+  mongo:
+    image: mongo
+    restart: always
+    volumes: 
+      - twitchclips-db:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+
+volumes:
+  twitchclips-db:`
+
 
 
 
