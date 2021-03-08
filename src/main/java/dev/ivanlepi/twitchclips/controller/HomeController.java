@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Controller
-@CrossOrigin(origins = "http://localhost:8080") // TODO change to different port once we have a client
+@CrossOrigin(origins = "http://localhost:3000") // TODO change to different port once we have a client
 public class HomeController {
 
     public static final Logger LOG = LoggerFactory.getLogger(HomeController.class);

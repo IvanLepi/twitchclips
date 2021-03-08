@@ -12,11 +12,19 @@ import java.util.HashMap;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GamelistService {
 
 	private final GameRepository gameRepository;
 	private final ClipsRepository clipRepository;
+
+	public static final Logger LOG = LoggerFactory.getLogger(GamelistService.class);
+
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	public GamelistService(GameRepository gameRepository, ClipsRepository clipRepository) {
 		this.gameRepository = gameRepository;
@@ -53,11 +61,17 @@ public class GamelistService {
 
 		if (sortBy.equalsIgnoreCase("new")) {
 			pageClips = getClips(game_id, broadcaster_id, page, Sort.by(Sort.Direction.DESC, "created_at"));
+		} else if(sortBy.equalsIgnoreCase("trending")){
+			clips = clipRepository.findTrendingClips(startDate(), endDate());
+			response.put("data", clips);
+			pageClips = Page.empty();
 		} else {
 			pageClips = getClips(game_id, broadcaster_id, page, Sort.by(Sort.Direction.DESC, "view_count"));
 		}
 
+
 		if (pageClips.getTotalElements() > 0) {
+
 			clips = pageClips.getContent();
 
 			Map<String, Integer> pageData = new HashMap<String, Integer>();
@@ -68,8 +82,24 @@ public class GamelistService {
 			response.put("data", clips);
 			response.put("pagination", pageData);
 		} else {
-			throw new Exception("NO_CONTENT");
+			response.put("data",clips);
 		}
+
 		return response;
+	}
+
+	// Calculate 24 hours earlier date string.
+    private String startDate() {
+        long currentDate = new Date().getTime();
+        long newDate = currentDate - 86400000;
+        String startDate = dateFormat.format(new Date(newDate));
+        return startDate;
+    }
+
+	private String endDate(){
+		long currentDate = new Date().getTime();
+		long ltDate = currentDate + 86400000;
+		String endDate = dateFormat.format(new Date(ltDate));
+		return endDate;
 	}
 }
