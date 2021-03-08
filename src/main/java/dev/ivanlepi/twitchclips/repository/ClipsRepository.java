@@ -1,5 +1,6 @@
 package dev.ivanlepi.twitchclips.repository;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import dev.ivanlepi.twitchclips.models.Clip;
 import org.springframework.data.mongodb.repository.Query;
@@ -9,6 +10,6 @@ public interface ClipsRepository extends MongoRepository<Clip, String>, ClipsCus
     
     //Trending Clips Query
     @Query("{ 'created_at' : { $gte: ?0, $lt: ?1}, 'view_count' : { $gt: 200, $lt: 10000000 } }")
-    List<Clip> findTrendingClips(String dateGT, String dateLT);
+    List<Clip> findTrendingClips(String dateGT, String dateLT, Sort sort);
     
 }

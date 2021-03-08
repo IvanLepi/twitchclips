@@ -62,7 +62,7 @@ public class GamelistService {
 		if (sortBy.equalsIgnoreCase("new")) {
 			pageClips = getClips(game_id, broadcaster_id, page, Sort.by(Sort.Direction.DESC, "created_at"));
 		} else if(sortBy.equalsIgnoreCase("trending")){
-			clips = clipRepository.findTrendingClips(startDate(), endDate());
+			clips = clipRepository.findTrendingClips(startDate(), endDate(), Sort.by(Sort.Direction.DESC, "view_count"));
 			response.put("data", clips);
 			pageClips = Page.empty();
 		} else {

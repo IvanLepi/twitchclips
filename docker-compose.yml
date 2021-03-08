@@ -4,7 +4,7 @@ services:
   api: 
     depends_on: 
       - mongo
-    image: devosdev/twitchclips:0.0.3-SNAPSHOT
+    image: twitchclips:0.0.1-SNAPSHOT
     ports: 
       - 8080:8080
     environment:
