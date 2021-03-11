@@ -21,6 +21,7 @@ Front end of the application pulls the data from our server and displays it for 
     * :heavy_check_mark: Get Top 60 Clips for each Game for the last 24 hours
 * Decide on Front-End Client
     * :heavy_check_mark: React
+    * Spring Web
 * Work on Client side
 * Use Docker Compose
     * :heavy_check_mark: `spring-boot:build-image` for Spring Boot
