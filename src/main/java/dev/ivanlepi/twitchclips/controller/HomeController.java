@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 
-import dev.ivanlepi.twitchclips.service.GamelistService;
+import dev.ivanlepi.twitchclips.service.GameListService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +24,10 @@ public class HomeController {
 
     public static final Logger LOG = LoggerFactory.getLogger(HomeController.class);
 
-    private GamelistService gamelistService;
+    private GameListService gamelistService;
 
     @Autowired
-    public HomeController(GamelistService gamelistService) {
+    public HomeController(GameListService gamelistService) {
         this.gamelistService = gamelistService;
     }
 

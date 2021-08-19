@@ -17,16 +17,16 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GamelistService {
+public class GameListService {
 
 	private final GameRepository gameRepository;
 	private final ClipsRepository clipRepository;
 
-	public static final Logger LOG = LoggerFactory.getLogger(GamelistService.class);
+	public static final Logger LOG = LoggerFactory.getLogger(GameListService.class);
 
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-	public GamelistService(GameRepository gameRepository, ClipsRepository clipRepository) {
+	public GameListService(GameRepository gameRepository, ClipsRepository clipRepository) {
 		this.gameRepository = gameRepository;
 		this.clipRepository = clipRepository;
 	}

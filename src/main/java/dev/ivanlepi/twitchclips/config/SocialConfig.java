@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Configuration;
 
 import dev.ivanlepi.twitchclips.repository.GameRepository;
 import dev.ivanlepi.twitchclips.repository.ClipsRepository;
-import dev.ivanlepi.twitchclips.service.GamelistService;
+import dev.ivanlepi.twitchclips.service.GameListService;
 
 @Configuration
 public class SocialConfig {
@@ -13,9 +13,9 @@ public class SocialConfig {
 	private ClipsRepository clipRepo;
 
 	@Bean
-	public GamelistService gamelistService(GameRepository gameRepository, ClipsRepository clipRepository) {
+	public GameListService gamelistService(GameRepository gameRepository, ClipsRepository clipRepository) {
 		this.gameRepo = gameRepository;
 		this.clipRepo = clipRepository;
-		return new GamelistService(gameRepo, clipRepo);
+		return new GameListService(gameRepo, clipRepo);
 	}
 }
