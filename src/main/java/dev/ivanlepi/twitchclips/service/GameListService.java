@@ -92,14 +92,12 @@ public class GameListService {
     private String startDate() {
         long currentDate = new Date().getTime();
         long newDate = currentDate - 86400000;
-        String startDate = dateFormat.format(new Date(newDate));
-        return startDate;
+        return dateFormat.format(new Date(newDate));
     }
 
 	private String endDate(){
 		long currentDate = new Date().getTime();
 		long ltDate = currentDate + 86400000;
-		String endDate = dateFormat.format(new Date(ltDate));
-		return endDate;
+		return dateFormat.format(new Date(ltDate));
 	}
 }
