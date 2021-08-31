@@ -28,6 +28,7 @@ Front end of the application pulls the data from our server and displays it for 
     * :heavy_check_mark: [Mongo Docker Image](https://hub.docker.com/_/mongo) for DB
     * :heavy_check_mark: Seperate Update Service into a seperate container
 * Use CI/CD
+* Use of Effective Java practices
 
 ## Running the application
 Both API and Scheduler are available as public Docker images. Also Mongo Docker image is used.
