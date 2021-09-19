@@ -1,4 +1,6 @@
-# Twitch Clips Application 
+# Twitch Clips Backend [![Build Status](https://app.travis-ci.com/IvanLepi/twitchclips.svg?branch=main)](https://travis-ci.org/IvanLepi/twitchclips)
+
+# Twitch Clips Application
 
 The aplication consumes Twitch API which uses OAuth2 for authentication and stores data into a local MongoDB database. 
 Front end of the application pulls the data from our server and displays it for the end user. 
@@ -27,7 +29,7 @@ Front end of the application pulls the data from our server and displays it for 
     * :heavy_check_mark: `spring-boot:build-image` for Spring Boot
     * :heavy_check_mark: [Mongo Docker Image](https://hub.docker.com/_/mongo) for DB
     * :heavy_check_mark: Seperate Update Service into a seperate container
-* Use CI/CD
+* :heavy_check_mark: Use CI/CD
 * Use of Effective Java practices
 
 ## Running the application
@@ -46,7 +48,7 @@ services:
   api: 
     depends_on: 
       - mongo
-    image: devosdev/twitchclips:0.0.2-SNAPSHOT
+    image: devosdev/twitchclips
     ports: 
       - 8080:8080
     environment:
