@@ -1,4 +1,4 @@
-# Twitch Clips Backend [![Build Status](https://app.travis-ci.com/IvanLepi/twitchclips.svg?branch=main)](https://travis-ci.com/IvanLepi/twitchclips)
+# Twitch Clips Backend [![Build Status](https://app.travis-ci.com/IvanLepi/twitchclips.svg?branch=master)](https://app.travis-ci.com/IvanLepi/twitchclips)
 
 # Twitch Clips Application
 
